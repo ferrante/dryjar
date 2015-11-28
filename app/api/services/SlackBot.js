@@ -9,6 +9,12 @@
     var text = message.text;
     var user = null;
 
+    if (/status/.test(text) && new RegExp(slack.self.id).test(text)) {
+      SlackLadder.get(slackUser, channel, function (response) {
+        channel.send("Team stats: \n" + response);
+      });
+      return;
+    }
 
     if (slackUser.name !== sails.config.slack.botName) {
       var validationResult = SlackMessageValidator({
@@ -18,8 +24,12 @@
       if (validationResult.getScore()) {
         channel.send(validationResult.getResponse());
         ChargeService.charge(slackUser, channel.name, function () {
-          ChargeService.stats(slackUser, channel, function (data) {
-            channel.send("Your current balance is " + data.amount + " PLN");
+          ChargeService.userStats(slackUser, channel, function (data) {
+            channel.send("<@" + slackUser.name + ">'s balance is " + data.amount + " PLN");
+
+            SlackLadder.get(slackUser, channel, function (response) {
+              channel.send("Team stats: \n" + response);
+            });
           });
         })
       }

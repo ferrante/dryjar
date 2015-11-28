@@ -6,10 +6,17 @@ module.exports = {
     });
   },
 
-   stats: function(user, org, cb) {
+  userStats: function(user, org, cb) {
     Charge.find({ where: {user_name: user.name, organization: org.name}}).sum('amount').exec(function(err, charges) {
       if(err) throw err;
       cb(charges[0]);
+    });
+  },
+
+  orgStats: function(user, org, cb) {
+    Charge.find().sum('amount').groupBy('user_name').exec(function(err, charges) {
+      if(err) throw err;
+      cb(charges);
     });
   },
 
