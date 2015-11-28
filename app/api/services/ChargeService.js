@@ -1,15 +1,15 @@
 module.exports = {
-  addCharge: function(name, org, next) {
-    Charge.create({user_name: name, organization: org, amount: 10}).exec(function(err, todo) {
+  charge: function(user, org, cb) {
+    Charge.create({user_name: user.name, organization: org, amount: 10}).exec(function(err, todo) {
       if(err) throw err;
-      next(todo);
+      cb(todo);
     });
   },
 
-   stats: function(name, org, next) {
-    Charge.find({ where: {user_name: "zdzisiek", organization: "dryjar"}}).sum('amount').exec(function(err, charges) {
+   stats: function(user, org, cb) {
+    Charge.find({ where: {user_name: user.name, organization: org.name}}).sum('amount').exec(function(err, charges) {
       if(err) throw err;
-      next(charges);
+      cb(charges[0]);
     });
   },
 

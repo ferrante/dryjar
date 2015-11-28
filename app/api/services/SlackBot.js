@@ -9,15 +9,19 @@
     var text = message.text;
     var user = null;
 
-    if (user && user.getUsername() !== sails.config.slack.botName) {
+
+    if (slackUser.name !== sails.config.slack.botName) {
       var validationResult = SlackMessageValidator({
         text: text
       });
 
       if (validationResult.getScore()) {
         channel.send(validationResult.getResponse());
-        ChargeService.charge(slackUser, channel)
-        channel.send("Your current balance is " + ChargeService.stats(slackUser, channel) + " PLN");
+        ChargeService.charge(slackUser, channel.name, function () {
+          ChargeService.stats(slackUser, channel, function (data) {
+            channel.send("Your current balance is " + data.amount + " PLN");
+          });
+        })
       }
     }
   });
