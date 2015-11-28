@@ -5,18 +5,27 @@
 
   slack.on("message", function (message) {
     var channel = slack.getChannelGroupOrDMByID(message.channel);
-    var user = slack.getUserByID(message.user);
+    var slackUser = slack.getUserByID(message.user);
     var text = message.text;
-    var username = null;
-    if (user.name) {
-      username = user.name;
+    var user = null;
+
+    if (!SlackUsers.hasOwnProperty(slackUser.id)) {
+      SlackUsers[slackUser.id] = user = SlackUser({
+        slackUser: slackUser
+      });
+    } else {
+      user = SlackUsers[slackUser.id];
     }
-    if (username && username !== sails.config.slack.botName) {
+
+    if (user && user.getUsername() !== sails.config.slack.botName) {
       var validationResult = SlackMessageValidator({
         text: text
       });
+
       if (validationResult.getScore()) {
         channel.send(validationResult.getResponse());
+        user.addScore(validationResult.getScore());
+        channel.send("Your current balance is " + user.getScore() + " PLN");
       }
     }
   });
