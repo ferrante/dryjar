@@ -17,6 +17,10 @@
  *
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
+ *
+ * CREATE USER dryjar  WITH PASSWORD 'dryjar';
+ * CREATE DATABASE dryjar;
+ * GRANT ALL PRIVILEGES ON DATABASE dryjar to dryjar;
  */
 
 module.exports.connections = {
@@ -30,6 +34,17 @@ module.exports.connections = {
   ***************************************************************************/
   localDiskDb: {
     adapter: 'sails-disk'
+  },
+
+  localPostgres: {
+    adapter: 'waterline-postgresql',
+    connection: {
+      host: 'localhost',
+      port: '5432',
+      user: 'dryjar',
+      password: 'dryjar',
+      database: 'dryjar'
+    }
   },
 
   /***************************************************************************
