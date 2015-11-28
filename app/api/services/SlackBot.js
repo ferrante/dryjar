@@ -20,7 +20,7 @@
         SlackLadder.get(slackUser, channel, function (response) {
           channel.postMessage({
             attachments: [{
-              text: "Team stats: \n" + response,
+              text: "Statystyki z suchego słoika: \n" + response,
               color: "#555"
             }]
           });
@@ -54,7 +54,6 @@
             channel.postMessage({
               attachments: attachments
             });
- //           channel.send("Suggested donations: \n" + response);
           }
         });
         return;
@@ -92,6 +91,7 @@
             });
 
             if (success) {
+              console.log(amount, date);
               ChargeService.notifyPayment(slackUser, amount, date, function () {
                 channel.send("Zapłaciłeś" + amount + "PLN, brawo");
               });
@@ -116,7 +116,7 @@
             channel.send("<@" + slackUser.name + ">'s balance is " + data.amount + " PLN");
 
             SlackLadder.get(slackUser, channel, function (response) {
-              channel.send("Team stats: \n" + response);
+              channel.send("Statystyki z suchego słoika: \n" + response);
             });
           });
         })
