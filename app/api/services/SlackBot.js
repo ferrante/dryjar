@@ -83,7 +83,7 @@
               
               if (new RegExp(slackUser.name).test(text)) {
                 success = true;
-                amount + parseInt(textAmount);
+                amount = parseInt(textAmount);
                 date = textDate;
               } else {
                 success = false;
@@ -91,9 +91,8 @@
             });
 
             if (success) {
-              console.log(amount, date);
               ChargeService.notifyPayment(slackUser, slack.team.name, amount, date, function () {
-                channel.send("Zapłaciłeś" + amount + "PLN, brawo");
+                channel.send("Zapłaciłeś/aś " + amount + "PLN, dziękujęmy, brawo!");
               });
             } else {
               channel.send("Jeszcze nie odnotowano Twojej płatności");

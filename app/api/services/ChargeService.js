@@ -22,8 +22,8 @@ module.exports = {
 
   notifyPayment: function(user, org, amount, payment_date, cb) {
     Charge.find({ where: {user_name: user.name, organization: org.name, payment_date: payment_date}}).exec(function(err, payments){
-      if(payments.lenght == 0){
-        Charge.create({user_name: user.name, organization: org, amount: -1 * amount}).exec(function(err, cb2) {
+      if(payments.length == 0){
+        Charge.create({user_name: user.name, organization: org, payment_date: payment_date, amount: -1 * amount}).exec(function(err, cb2) {
           if(err) throw err;
             cb(cb2);
           });
