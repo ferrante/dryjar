@@ -15,7 +15,7 @@ module.exports = {
       type: 'string'
     },
     amount: {
-      type: 'int'
+      type: 'integer'
     }
   }
 };
