@@ -12,6 +12,12 @@ module.exports = {
   		ChargeService.addCharge(username, organization, function(success) {
             res.json(success);
         });
-	}	
+	},
+
+	stats: function(req, res) {
+        ChargeService.stats("zdzisiek", "dryjar", function(todos) {
+            res.json(todos);
+        });
+    },	
 };
 

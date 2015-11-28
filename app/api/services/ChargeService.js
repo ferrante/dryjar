@@ -4,5 +4,13 @@ module.exports = {
       if(err) throw err;
       next(todo);
     });
-  }
+  },
+
+   stats: function(name, org, next) {
+    Charge.find({ where: {user_name: "zdzisiek", organization: "dryjar"}}).sum('amount').exec(function(err, charges) {
+      if(err) throw err;
+      next(charges);
+    });
+  },
+
 };
