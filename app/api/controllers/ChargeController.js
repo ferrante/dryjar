@@ -7,9 +7,9 @@
 
 module.exports = {
 	charge: function (req, res) {
-		console.log(req)
 		var username = req.param("name")
-  		ChargeService.addCharge(username, function(success) {
+		var organization = req.param("organization")
+  		ChargeService.addCharge(username, organization, function(success) {
             res.json(success);
         });
 	}	

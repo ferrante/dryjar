@@ -11,6 +11,9 @@ module.exports = {
   	user_name: {
       type: 'string'
     },
+    organization: {
+      type: 'string'
+    },
     amount: {
       type: 'int'
     }
