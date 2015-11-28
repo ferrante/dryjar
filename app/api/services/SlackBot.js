@@ -16,7 +16,7 @@
     var user = null;
 
     if (new RegExp(slack.self.id).test(text)) {
-      if (/status/.test(text)) {
+      if (/stats/.test(text)) {
         SlackLadder.get(slackUser, slack.team.name, function (response) {
           channel.postMessage({
             attachments: [{
@@ -28,7 +28,7 @@
         return;
       }
 
-      if (/donate/.test(text)) {
+      if (/ideas/.test(text)) {
         ChargeService.userStats(slackUser, slack.team.name, function (data) {
           data.amount = data.amount || 20;
           jsdom.env({
@@ -115,13 +115,19 @@
         channel.send(validationResult.getResponse());
         ChargeService.charge(slackUser, slack.team.name, function () {
           ChargeService.userStats(slackUser, slack.team.name, function (data) {
-            channel.send("<@" + slackUser.name + ">'s balance is " + data.amount + " PLN");
+            channel.send("<@" + slackUser.name + ">: stan Twojego konta to " + data.amount + " PLN");
 
             SlackLadder.get(slackUser, slack.team.name, function (response) {
               channel.send("Statystyki z suchego słoika: \n" + response);
             });
           });
         })
+      } else {
+        ChargeService.userStats(slackUser, slack.team.name, function (data) {
+          if (data.amount > 30) {
+            channel.send("<@" + slackUser.name + ">: Btw. trochę się tego zebrało... Masz już do zapłaty " + data.amount + " PLN za swoje 'zachowanie'.");
+          }
+        });
       }
     }
   });
