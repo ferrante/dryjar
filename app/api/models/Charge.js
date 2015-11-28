@@ -16,6 +16,9 @@ module.exports = {
     },
     amount: {
       type: 'integer'
+    },
+    payment_date: {
+      type: 'string'
     }
   }
 };
