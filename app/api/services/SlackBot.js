@@ -29,32 +29,35 @@
       }
 
       if (/donate/.test(text)) {
-        jsdom.env({
-          url: "http://siepomaga.pl",
-          scripts: ["http://code.jquery.com/jquery.js"],
-          done: function (err, window) {
-            var $ = window.$;
-            var attachments = [];
-            $("#awarded_causes li").each(function() {
-              var attachment = {};
-              var text = "";
-              var href = "http://siepomaga.pl" + $(this).find(".red").attr("href") + "/koszyk/dodaj?payment[amount]=20";
-              var title = $(this).find("h3 a").text();
-              var img = $(this).find("img").attr("src");
-              attachment.fallback = title;
-              attachment.color = "#bb2";
-              attachment.title = title;
-              attachment.title_link = href;
-              attachment.image_url = img;
-              attachment.thumb_url = img;
-              attachment.text = "Pomóż";
-              attachment.author_icon = "http://familyof3.org/wp-content/uploads/2014/10/donate-icon.png";
-              attachments.push(attachment);
-            });
-            channel.postMessage({
-              attachments: attachments
-            });
-          }
+        ChargeService.userStats(slackUser, slack.team.name, function (data) {
+          data.amount = data.amount || 20;
+          jsdom.env({
+            url: "http://siepomaga.pl",
+            scripts: ["http://code.jquery.com/jquery.js"],
+            done: function (err, window) {
+              var $ = window.$;
+              var attachments = [];
+              $("#awarded_causes li").each(function() {
+                var attachment = {};
+                var text = "";
+                var href = "http://siepomaga.pl" + $(this).find(".red").attr("href") + "/koszyk/dodaj?payment[amount]="+ data.amount +"&payment[comment_text]=" + slackUser.name;
+                var title = $(this).find("h3 a").text();
+                var img = $(this).find("img").attr("src");
+                attachment.fallback = title;
+                attachment.color = "#bb2";
+                attachment.title = title;
+                attachment.title_link = href;
+                attachment.image_url = img;
+                attachment.thumb_url = img;
+                attachment.text = "Pomóż";
+                attachment.author_icon = "http://familyof3.org/wp-content/uploads/2014/10/donate-icon.png";
+                attachments.push(attachment);
+              });
+              channel.postMessage({
+                attachments: attachments
+              });
+            }
+          });
         });
         return;
       }

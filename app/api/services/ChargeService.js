@@ -14,8 +14,13 @@ module.exports = {
   },
 
   orgStats: function(user, org, cb) {
-    Charge.find().sum('amount').groupBy('user_name').exec(function(err, charges) {
+    Charge.find().sum('amount').groupBy('user_name').where({'organization': org}).exec(function(err, charges) {
       if(err) throw err;
+      if (charges) {
+        charges.sort(function (a, b) {
+          return b.amount - a.amount;
+        });
+      }
       cb(charges);
     });
   },
