@@ -17,7 +17,7 @@
 
     if (new RegExp(slack.self.id).test(text)) {
       if (/status/.test(text)) {
-        SlackLadder.get(slackUser, channel, function (response) {
+        SlackLadder.get(slackUser, slack.team.name, function (response) {
           channel.postMessage({
             attachments: [{
               text: "Statystyki z suchego słoika: \n" + response,
@@ -92,7 +92,7 @@
 
             if (success) {
               console.log(amount, date);
-              ChargeService.notifyPayment(slackUser, amount, date, function () {
+              ChargeService.notifyPayment(slackUser, slack.team.name, amount, date, function () {
                 channel.send("Zapłaciłeś" + amount + "PLN, brawo");
               });
             } else {
@@ -111,11 +111,11 @@
 
       if (validationResult.getScore()) {
         channel.send(validationResult.getResponse());
-        ChargeService.charge(slackUser, channel.name, function () {
-          ChargeService.userStats(slackUser, channel, function (data) {
+        ChargeService.charge(slackUser, slack.team.name, function () {
+          ChargeService.userStats(slackUser, slack.team.name, function (data) {
             channel.send("<@" + slackUser.name + ">'s balance is " + data.amount + " PLN");
 
-            SlackLadder.get(slackUser, channel, function (response) {
+            SlackLadder.get(slackUser, slack.team.name, function (response) {
               channel.send("Statystyki z suchego słoika: \n" + response);
             });
           });

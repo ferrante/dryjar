@@ -7,7 +7,7 @@ module.exports = {
   },
 
   userStats: function(user, org, cb) {
-    Charge.find({ where: {user_name: user.name, organization: org.name}}).sum('amount').exec(function(err, charges) {
+    Charge.find({ where: {user_name: user.name, organization: org}}).sum('amount').exec(function(err, charges) {
       if(err) throw err;
       cb(charges[0]);
     });
